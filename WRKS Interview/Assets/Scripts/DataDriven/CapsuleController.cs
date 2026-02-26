@@ -6,6 +6,9 @@ public class CapsuleController : MonoBehaviour
     [SerializeField] private float speed = 5f;
     [SerializeField] private float frictionAmt = 5f;
     [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private GameObject shootingPoint;
+    [SerializeField] private float shootSpeed = 20f;
     private Rigidbody rb;
     private Camera mainCamera;
     private float horizontal;
@@ -26,6 +29,11 @@ public class CapsuleController : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         mouseX = Input.GetAxis("Mouse X");
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ShootProjectile();
+        }
     }
 
     void FixedUpdate()
@@ -46,5 +54,17 @@ public class CapsuleController : MonoBehaviour
         transform.Rotate(Vector3.up * mouseX * Time.fixedDeltaTime * rotationSpeed);
     }
 
-    
+    private void ShootProjectile()
+    {
+        if(bulletPrefab == null) return;
+
+        GameObject bullet = Instantiate(bulletPrefab, shootingPoint.transform.position, transform.rotation);
+
+        Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+
+        if(bulletRb != null)
+        {
+            bulletRb.AddForce(-shootingPoint.transform.up * shootSpeed, ForceMode.Impulse);
+        }
+    }
 }
