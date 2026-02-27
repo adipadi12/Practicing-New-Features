@@ -16,6 +16,8 @@ public class BulletController : MonoBehaviour
         {
             shootEffect.gameObject.SetActive(false);
         }
+
+        StartCoroutine(DestroyBulletAfter(2f));
     }
 
     void OnTriggerEnter(Collider other)
@@ -26,22 +28,12 @@ public class BulletController : MonoBehaviour
             shootEffect.Play();    
         }
 
-        StartCoroutine(DestroyBulletAfter());
+        StartCoroutine(DestroyBulletAfter(0.4f));
     }
-    // void OnCollisionEnter(Collision collision)
-    // {
-    //     if(shootEffect != null)
-    //     {
-    //         shootEffect.gameObject.SetActive(true);
-    //         shootEffect.Play();    
-    //     }
 
-    //     StartCoroutine(DestroyBulletAfter());
-    // }
-
-    private IEnumerator DestroyBulletAfter()
+    private IEnumerator DestroyBulletAfter(float bulletTime)
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(bulletTime);
         Destroy(gameObject);
     }
 }
